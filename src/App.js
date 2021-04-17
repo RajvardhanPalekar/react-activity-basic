@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Activities from "./components/Activities";
 import AddActivity from "./components/AddActivity";
+import Footer from "./components/Footer";
+import About from "./components/About";
 
 function App() {
   const [showAdd, setShowAdd] = useState(false);
@@ -78,19 +80,31 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <Header onAdd={() => setShowAdd(!showAdd)} showAdd={showAdd} />
-      {showAdd && <AddActivity onAdd={addActivity} />}
-      {activities.length > 0 ? (
-        <Activities
-          activities={activities}
-          onDelete={deleteActivity}
-          onToggle={toggleReminder}
+    <Router>
+      <div className="container">
+        <Header onAdd={() => setShowAdd(!showAdd)} showAdd={showAdd} />
+        <Route
+          path="/"
+          exact
+          render={(props) => (
+            <>
+              {showAdd && <AddActivity onAdd={addActivity} />}
+              {activities.length > 0 ? (
+                <Activities
+                  activities={activities}
+                  onDelete={deleteActivity}
+                  onToggle={toggleReminder}
+                />
+              ) : (
+                "No Activities to show"
+              )}
+            </>
+          )}
         />
-      ) : (
-        "No Activities to show"
-      )}
-    </div>
+        <Route path="/about" component={About} />
+        <Footer />
+      </div>
+    </Router>
   );
 }
 
